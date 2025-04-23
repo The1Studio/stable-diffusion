@@ -14,8 +14,6 @@ x-base_service: &base_service
                 device_ids: ['0']
                 capabilities: [compute, utility]
 
-name: webui-docker
-
 networks:
   theone-net:
     external: true
@@ -30,7 +28,6 @@ services:
 
   auto: &automatic
     <<: *base_service
-    profiles: ["auto"]
     build: ./services/AUTOMATIC1111
     image: sd-auto:78
     networks:
