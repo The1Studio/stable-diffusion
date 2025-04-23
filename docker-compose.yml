@@ -2,8 +2,8 @@ x-base_service: &base_service
     ports:
       - "${WEBUI_PORT:-7860}:7860"
     volumes:
-      - &v1 ./data:/data
-      - &v2 ./output:/output
+      - &v1 ${MOUNT_PATH}/data:/data
+      - &v2 ${MOUNT_PATH}/output:/output
     stop_signal: SIGKILL
     tty: true
     deploy:
@@ -15,6 +15,11 @@ x-base_service: &base_service
                 capabilities: [compute, utility]
 
 name: webui-docker
+
+networks:
+  theone-net:
+    external: true
+    name: "dockers_theone-net"
 
 services:
   download:
@@ -28,8 +33,15 @@ services:
     profiles: ["auto"]
     build: ./services/AUTOMATIC1111
     image: sd-auto:78
+    networks:
+        - "theone-net"
+    labels:
+        traefik.enable: true
+        traefik.http.routers.diffusion.rule: Host(`diffusion-api.the1studio.org`)
+        traefik.http.services.diffusion.loadbalancer.server.port: 7860
     environment:
-      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
+      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --no-half --disable-nan-check --gradio-auth theone:9Jn7xdf8S0HKdkPPJ0
+    restart: always
 
   auto-cpu:
     <<: *automatic
