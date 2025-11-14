@@ -16,7 +16,7 @@ jobs:
           - auto
           - comfy
           - download
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, arc, the1studio, org]
     name: ${{ matrix.profile }}
     steps:
       - uses: actions/checkout@v3
