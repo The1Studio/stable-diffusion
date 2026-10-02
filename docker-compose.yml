@@ -37,7 +37,7 @@ services:
         traefik.http.routers.diffusion.rule: Host(`diffusion-api.the1studio.org`)
         traefik.http.services.diffusion.loadbalancer.server.port: 7860
     environment:
-      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --no-half --disable-nan-check --gradio-auth ${GRADIO_AUTH}
+      - CLI_ARGS=--medvram --xformers --api --no-half --disable-nan-check --gradio-auth ${GRADIO_AUTH} --api-auth ${API_AUTH:-${GRADIO_AUTH}}
     restart: always
 
   auto-cpu:
@@ -45,7 +45,7 @@ services:
     profiles: ["auto-cpu"]
     deploy: {}
     environment:
-      - CLI_ARGS=--no-half --precision full --allow-code --enable-insecure-extension-access --api
+      - CLI_ARGS=--no-half --precision full --api --gradio-auth ${GRADIO_AUTH} --api-auth ${API_AUTH:-${GRADIO_AUTH}}
 
   comfy: &comfy
     <<: *base_service
