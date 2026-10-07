@@ -19,5 +19,5 @@ jobs:
     runs-on: [self-hosted, linux, x64, arc, the1studio, org]
     name: ${{ matrix.profile }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: docker compose --profile ${{ matrix.profile }} build --progress plain
